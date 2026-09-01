@@ -29,19 +29,26 @@ jobs:
           sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/lib/android /opt/hostedtoolcache
           df -h /
 
-      - name: Install build tooling
+      # live-build is a Debian tool; Ubuntu's fork lacks options this config uses
+      # (--distribution-chroot, --image-name, ...). Build inside a Debian trixie
+      # container so the toolchain matches the WSL build exactly. --privileged is
+      # needed for debootstrap's mounts and the squashfs/ISO loop operations.
+      - name: Build packages + ISO in a Debian trixie container
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            live-build debootstrap squashfs-tools xorriso isolinux syslinux-common \
-            grub-pc-bin grub-efi-amd64-bin mtools dosfstools apt-utils gnupg \
-            ca-certificates curl nodejs
+          docker run --rm --privileged \
+            -v "$GITHUB_WORKSPACE":/build -w /build \
+            debian:trixie bash -euo pipefail -c '
+              export DEBIAN_FRONTEND=noninteractive
+              apt-get update
+              apt-get install -y --no-install-recommends \
+                live-build debootstrap squashfs-tools xorriso isolinux syslinux-common \
+                grub-pc-bin grub-efi-amd64-bin mtools dosfstools ca-certificates curl
+              bash packaging/build-packages.sh
+              bash build.sh --no-deps
+            '
 
-      - name: Build the Debian packages
-        run: bash packaging/build-packages.sh
-
-      - name: Build the ISO
-        run: sudo bash build.sh --no-deps
+      - name: Install host tooling for repo + release
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends apt-utils gnupg
 
       - name: Name the artifacts
         id: names
