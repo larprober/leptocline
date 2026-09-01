@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.1
+Name=Leptocline Arsenal
+Comment=List the security toolkit and what is installed
+Exec=xfce4-terminal --hold --title="Leptocline Arsenal" --command="lepto tools"
+Icon=leptocline
+Terminal=false
+Categories=System;Security;
+Keywords=security;pentest;nmap;tools;arsenal;

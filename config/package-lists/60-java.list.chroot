@@ -1,0 +1,4 @@
+# Linux Leptocline — Java runtime + AppImage support, for Prism Launcher.
+openjdk-21-jre
+libfuse2t64
+mesa-utils

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=1.1
+Name=Prism Launcher
+GenericName=Minecraft Launcher
+Comment=Launch Minecraft — open source, needs a Microsoft account
+Exec=prismlauncher
+Icon=prismlauncher
+Terminal=false
+Categories=Game;
+Keywords=minecraft;prism;game;launcher;

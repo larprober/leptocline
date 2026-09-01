@@ -1,0 +1,18 @@
+#!/bin/sh
+# Select the Leptocline boot splash and rebuild the initramfs around it.
+set -e
+
+if [ ! -d /usr/share/plymouth/themes/leptocline ]; then
+	echo "W: lepto — plymouth theme missing, skipping"
+	exit 0
+fi
+
+echo "P: lepto — setting plymouth theme"
+if command -v plymouth-set-default-theme >/dev/null 2>&1; then
+	plymouth-set-default-theme leptocline
+else
+	update-alternatives --install /usr/share/plymouth/themes/default.plymouth \
+		default.plymouth /usr/share/plymouth/themes/leptocline/leptocline.plymouth 200
+fi
+
+update-initramfs -u

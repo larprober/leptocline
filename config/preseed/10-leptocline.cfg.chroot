@@ -1,0 +1,16 @@
+# tshark pulls wireshark-common, which otherwise stops the build to ask.
+wireshark-common wireshark-common/install-setuid boolean false
+# macchanger asks whether to change the MAC automatically on every ifup/down.
+# Default it to no so the build never blocks; flip it later if you want.
+macchanger macchanger/automatically_run boolean false
+# kismet, if ever added, asks about its suid helper group.
+kismet-capture-common kismet-capture-common/install-users string
+kismet-capture-common kismet-capture-common/install-setuid boolean false
+# Keep the build non-interactive.
+console-setup console-setup/charmap47 select UTF-8
+locales locales/default_environment_locale select en_US.UTF-8
+locales locales/locales_to_be_generated multiselect en_US.UTF-8 UTF-8
+# Turkish keyboard as the default on the installed system too.
+keyboard-configuration keyboard-configuration/xkb-keymap select tr
+keyboard-configuration keyboard-configuration/layoutcode string tr
+keyboard-configuration keyboard-configuration/modelcode string pc105

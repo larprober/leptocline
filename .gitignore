@@ -1,0 +1,26 @@
+# live-build working tree (anchored to repo root so we don't ignore, e.g.,
+# config/includes.chroot/usr/local which holds the lepto tools)
+/.build/
+/cache/
+/chroot/
+/chroot.files*
+/binary/
+/binary.*
+/local/
+/auto/cache/
+*.iso
+*.img
+*.log
+*.buildlog
+
+# generated brand assets (render-assets.js recreates them; the shipped copies
+# under config/includes.chroot are committed)
+/branding/out/
+
+# package + repo build outputs
+/packaging/out/
+/packaging/.stage/
+/repo/public/
+
+# one-off WSL helper scripts
+tools/_*.sh

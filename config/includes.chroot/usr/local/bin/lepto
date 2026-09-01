@@ -1,0 +1,193 @@
+#!/usr/bin/env bash
+# lepto — the front door to a Linux Leptocline system.
+set -euo pipefail
+
+B=$'\e[1;38;2;60;110;255m'; K=$'\e[90m'; N=$'\e[0m'; W=$'\e[97m'
+ORIG_ARGS=("$@")
+
+say()  { printf '%s%s%s\n' "$B" "$*" "$N"; }
+warn() { printf '%s!!%s %s\n' "$B" "$N" "$*" >&2; }
+
+need_root() {
+  [ "$(id -u)" -eq 0 ] || exec sudo -- "$0" "${ORIG_ARGS[@]}"
+}
+
+cmd_about() {
+  . /etc/os-release
+  cat <<ABOUT
+
+  ${B}${PRETTY_NAME}${N}
+  ${K}a Debian ${DEBIAN_BASE} live system that boots ready to look at a network${N}
+
+  ${W}desktop${N}    Xfce 4, Greybird dark, JetBrains Mono
+  ${W}kernel${N}     $(uname -r)
+  ${W}toolkit${N}    70+ security tools: nmap, hydra, hping3, aircrack-ng,
+             sqlmap, john, radare2, bettercap, wireshark (lepto tools)
+  ${W}build${N}      live-build, debian-installer, iso-hybrid (BIOS + UEFI)
+  ${W}home${N}       ${HOME_URL}
+
+  ${K}lepto tools${N}          what is installed and what it is for
+  ${K}lepto install-disk${N}   put this system on a drive
+  ${K}lepto update${N}         pull upstream Debian updates
+
+ABOUT
+}
+
+cmd_version() { . /etc/os-release; echo "${PRETTY_NAME}"; }
+
+cmd_tools() {
+  local cat tools t shown=0 total=0
+  printf "\n"
+  while IFS=: read -r cat tools; do
+    [ -z "$cat" ] && continue
+    say "  $cat"
+    for t in $tools; do
+      total=$((total + 1))
+      if command -v "$t" >/dev/null 2>&1; then
+        printf "    %s%-14s%s installed\n" "$W" "$t" "$N"; shown=$((shown + 1))
+      else
+        printf "    %s%-14s%s %s-%s\n" "$W" "$t" "$N" "$K" "$N"
+      fi
+    done
+    printf "\n"
+  done <<'CATS'
+recon:nmap masscan zmap arp-scan netdiscover fping hping3 ike-scan zenmap dmitry atk6-thc-ipv6
+dns:dnsrecon dnsenum dnstracer fierce dnsmap dig
+enum:smbclient smbmap nbtscan onesixtyone snmpwalk svmap ldapsearch
+tls:sslscan testssl.sh
+web:whatweb dirb gobuster ffuf wfuzz sqlmap wafw00f
+passwords:hydra john medusa ncrack patator crunch cewl hashid hashcat chntpw pdfcrack fcrackzip samdump2 ophcrack
+wireless:aircrack-ng reaver wifite mdk4 pixiewps cowpatty macchanger
+sniff:tshark tcpdump ettercap dsniff bettercap driftnet netsniff-ng ngrep p0f tcpflow
+reversing:binwalk foremost scalpel steghide hexedit hexyl ltrace strace apktool gdb
+tunnelling:iodine dns2tcp ptunnel
+subnet:netmask ipcalc sipcalc
+anonymity:proxychains4 tor torsocks
+defensive:chkrootkit rkhunter lynis
+CATS
+  printf "  %s%d of %d present. Missing something big like metasploit? try %slepto msf%s.%s\n\n" "$K" "$shown" "$total" "$W" "$K" "$N"
+}
+
+cmd_msf() {
+  if command -v msfconsole >/dev/null 2>&1; then
+    say ":: metasploit already installed: $(command -v msfconsole)"
+    return
+  fi
+  warn "Metasploit is not packaged by Debian. Rapid7 ships an official"
+  warn "installer that adds their apt repo - review it before running:"
+  printf "\n    %scurl -sSL https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb -o /tmp/msfinstall%s\n" "$W" "$N"
+  printf "    %schmod +x /tmp/msfinstall && sudo /tmp/msfinstall%s\n\n" "$W" "$N"
+}
+
+cmd_update() {
+  need_root
+  say ':: refreshing package lists'
+  apt-get update
+  say ':: upgrading'
+  apt-get -y full-upgrade
+  say ':: cleaning'
+  apt-get -y autoremove --purge
+  apt-get clean
+}
+
+cmd_install_disk() {
+  if [ ! -e /run/live/medium ] && [ ! -d /lib/live ]; then
+    warn 'not running from live media; nothing to install from'
+    exit 1
+  fi
+  # Prefer the graphical Calamares installer; fall back to debian-installer.
+  if command -v calamares >/dev/null 2>&1; then
+    say ':: launching the Leptocline installer'
+    if [ "$(id -u)" -eq 0 ]; then exec calamares; fi
+    command -v pkexec >/dev/null 2>&1 && exec pkexec calamares
+    exec sudo calamares
+  fi
+  for launcher in /usr/bin/debian-installer-launcher /usr/sbin/debian-installer-launcher; do
+    [ -x "$launcher" ] && exec "$launcher"
+  done
+  warn 'installer not found here — reboot and pick "Install" from the boot menu'
+  exit 1
+}
+
+cmd_wallpaper() {
+  local img=${1:-/usr/share/backgrounds/leptocline/leptocline-wallpaper.png}
+  [ -f "$img" ] || { warn "no such image: $img"; exit 1; }
+  command -v xfconf-query >/dev/null 2>&1 || { warn "xfconf-query not found"; exit 1; }
+
+  # xfdesktop names its backdrop properties after the live RandR outputs,
+  # which differ between real GPUs and virtual ones, so read what it actually
+  # registered rather than guessing names like monitor0. At login xfdesktop
+  # may not have registered them yet, hence the wait.
+  local tries=0 props=""
+  while [ "$tries" -lt 25 ]; do
+    props=$(xfconf-query -c xfce4-desktop -l 2>/dev/null | grep -E "/last-image$" || true)
+    [ -n "$props" ] && break
+    tries=$((tries + 1))
+    sleep 1
+  done
+
+  local p base m
+  if [ -n "$props" ]; then
+    for p in $props; do
+      base=${p%/last-image}
+      xfconf-query -c xfce4-desktop -p "$p" -s "$img" 2>/dev/null || true
+      xfconf-query -c xfce4-desktop -p "$base/image-style" -s 5 2>/dev/null || xfconf-query -c xfce4-desktop -p "$base/image-style" -n -t int -s 5 2>/dev/null || true
+    done
+  else
+    # Nothing registered at all: create entries for every connected output.
+    for m in $(xrandr --listmonitors 2>/dev/null | awk 'NR>1{print $NF}'); do
+      xfconf-query -c xfce4-desktop -p "/backdrop/screen0/monitor$m/workspace0/last-image" -n -t string -s "$img" 2>/dev/null || true
+      xfconf-query -c xfce4-desktop -p "/backdrop/screen0/monitor$m/workspace0/image-style" -n -t int -s 5 2>/dev/null || true
+    done
+  fi
+  say ":: wallpaper set to $img"
+}
+cmd_doctor() {
+  local ok=0 bad=0
+  check() {
+    if eval "$2" >/dev/null 2>&1; then
+      printf '  %sok  %s %s\n' "$B" "$N" "$1"; ok=$((ok + 1))
+    else
+      printf '  %s--  %s %s\n' "$K" "$N" "$1"; bad=$((bad + 1))
+    fi
+  }
+  printf '\n'
+  check 'branding installed'   '[ -f /usr/share/leptocline/logo.svg ]'
+  check 'wallpaper present'    '[ -f /usr/share/backgrounds/leptocline/leptocline-wallpaper.png ]'
+  check 'os-release is lepto'   'grep -q "^ID=lepto" /etc/os-release'
+  check 'plymouth theme'       '[ -f /usr/share/plymouth/themes/leptocline/leptocline.plymouth ]'
+  check 'leptofetch on PATH'    'command -v leptofetch'
+  check 'network manager up'   'systemctl is-active NetworkManager'
+  check 'name resolution'      'getent hosts deb.debian.org'
+  printf '\n  %d ok, %d not\n\n' "$ok" "$bad"
+}
+
+usage() {
+  cat <<USAGE
+
+  ${B}lepto${N} ${K}— Linux Leptocline control${N}
+
+    ${W}about${N}          what this system is
+    ${W}version${N}        print the release string
+    ${W}tools${N}          list the security toolkit and what is present
+    ${W}msf${N}            how to add Metasploit (not in Debian)
+    ${W}update${N}         apt update + full-upgrade + clean
+    ${W}install-disk${N}   run the installer from a live session
+    ${W}wallpaper${N} [f]  set the desktop background
+    ${W}doctor${N}         check that the branding and network are healthy
+
+USAGE
+}
+
+case "${1:-help}" in
+  about)        cmd_about ;;
+  version|-v|--version) cmd_version ;;
+  tools)        cmd_tools ;;
+  msf|metasploit) cmd_msf ;;
+  update)       cmd_update ;;
+  install-disk) cmd_install_disk ;;
+  wallpaper)    shift; cmd_wallpaper "${1:-}" ;;
+  doctor)       cmd_doctor ;;
+  help|-h|--help) usage ;;
+  *) warn "unknown command: $1"; usage; exit 1 ;;
+esac

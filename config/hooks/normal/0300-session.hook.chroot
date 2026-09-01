@@ -1,0 +1,18 @@
+#!/bin/sh
+# Session defaults: Xfce everywhere, and skel copied for any user d-i creates.
+set -e
+
+echo "P: lepto — session defaults"
+
+if [ -x /usr/bin/update-alternatives ] && [ -e /usr/bin/startxfce4 ]; then
+	update-alternatives --set x-session-manager /usr/bin/startxfce4 || true
+fi
+
+systemctl enable lightdm.service       >/dev/null 2>&1 || true
+systemctl enable NetworkManager.service >/dev/null 2>&1 || true
+
+# Xfce ships its first-run panel prompt when no panel config exists; ours does,
+# so make sure root sees the same defaults if anyone opens a root session.
+mkdir -p /root/.config
+cp -a /etc/skel/.config/. /root/.config/ 2>/dev/null || true
+cp -a /etc/skel/.bashrc /root/.bashrc 2>/dev/null || true

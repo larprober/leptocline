@@ -1,0 +1,11 @@
+# Everything is consumed by Linux — force LF so scripts and hooks never get
+# CRLF line endings that would break their shebang or parsing.
+* text=auto eol=lf
+
+# Explicitly binary (never touch these)
+*.png binary
+*.jpg binary
+*.ico binary
+*.gz  binary
+*.deb binary
+*.iso binary

@@ -1,0 +1,51 @@
+#!/bin/sh
+# Linux Leptocline — live-build configuration.
+# Must live at the TOP LEVEL of the build tree: live-build ignores it anywhere
+# else, and silently builds a stock Debian image instead.
+
+set -e
+
+# One place to change the target release. live-build 20250505 keeps separate
+# suites for the chroot, the binary stage and the installer, and each one
+# defaults to "testing" rather than inheriting --distribution, so all of them
+# have to be named explicitly.
+SUITE=trixie
+
+lb config noauto \
+	--mode debian \
+	--distribution "${SUITE}" \
+	--parent-distribution "${SUITE}" \
+	--distribution-chroot "${SUITE}" \
+	--parent-distribution-chroot "${SUITE}" \
+	--distribution-binary "${SUITE}" \
+	--parent-distribution-binary "${SUITE}" \
+	--debian-installer-distribution "${SUITE}" \
+	--parent-debian-installer-distribution "${SUITE}" \
+	--archive-areas "main contrib non-free non-free-firmware" \
+	--parent-archive-areas "main contrib non-free non-free-firmware" \
+	--architectures amd64 \
+	--linux-flavours amd64 \
+	--binary-images iso-hybrid \
+	--bootloaders "syslinux,grub-efi" \
+	--debian-installer live \
+	--debian-installer-gui true \
+	--mirror-bootstrap "http://deb.debian.org/debian/" \
+	--mirror-chroot "http://deb.debian.org/debian/" \
+	--mirror-binary "http://deb.debian.org/debian/" \
+	--firmware-binary true \
+	--firmware-chroot true \
+	--apt-recommends true \
+	--updates true \
+	--security true \
+	--backports false \
+	--memtest none \
+	--win32-loader false \
+	--zsync false \
+	--checksums sha256 \
+	--iso-application "Linux Leptocline" \
+	--iso-publisher "larprober; https://github.com/larprober; Linux Leptocline" \
+	--iso-preparer "live-build; https://salsa.debian.org/live-team/live-build" \
+	--iso-volume "LEPTOCLINE_1.0" \
+	--image-name "leptocline-1.0" \
+	--bootappend-live "boot=live components quiet splash username=lepto user-fullname=lepto hostname=leptocline locales=en_US.UTF-8 keyboard-layouts=tr" \
+	"${@}"

@@ -1,0 +1,33 @@
+---
+componentName: leptocline
+
+welcomeStyleCalamares: true
+welcomeExpandingLogo: true
+windowExpanding: normal
+windowSize: 820px,520px
+windowPlacement: center
+
+strings:
+    productName:         Linux Leptocline
+    shortProductName:    Leptocline
+    version:             1.0
+    shortVersion:        1.0
+    versionedName:       Linux Leptocline 1.0 "understudy"
+    shortVersionedName:  Leptocline 1.0
+    bootloaderEntryName: Leptocline
+    productUrl:          https://github.com/larprober/leptocline
+    supportUrl:          https://github.com/larprober/leptocline/issues
+    releaseNotesUrl:     https://github.com/larprober/leptocline
+
+images:
+    productLogo:    "logo.png"
+    productIcon:    "logo.png"
+    productWelcome: "logo.png"
+
+slideshow: "show.qml"
+
+style:
+    sidebarBackground:    "#0B2024"
+    sidebarText:          "#FFFFFF"
+    sidebarTextSelect:    "#19C6D6"
+    sidebarTextHighlight: "#19C6D6"

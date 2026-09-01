@@ -1,0 +1,18 @@
+#!/bin/sh
+# Trim the squashfs. Roughly 250-350 MB comes off here.
+set -e
+
+echo "P: lepto — cleanup"
+
+apt-get -y autoremove --purge
+apt-get clean
+
+rm -rf /var/lib/apt/lists/*
+rm -rf /var/cache/apt/archives/*.deb
+rm -rf /tmp/* /var/tmp/*
+find /var/log -type f -name '*.log' -delete 2>/dev/null || true
+
+find /usr/share/doc -type f \( -name 'changelog*' -o -name 'NEWS*' \) -delete 2>/dev/null || true
+
+: > /etc/machine-id
+rm -f /var/lib/dbus/machine-id

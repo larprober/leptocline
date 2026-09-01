@@ -1,0 +1,4 @@
+// Linux Leptocline: keep apt quiet and the disk small on a live image.
+APT::Install-Suggests "false";
+APT::Get::Show-Versions "true";
+Acquire::Languages "none";

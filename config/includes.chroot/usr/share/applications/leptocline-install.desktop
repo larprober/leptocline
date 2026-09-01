@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.1
+Name=Install Linux Leptocline
+Comment=Copy this live system onto a drive
+Exec=lepto install-disk
+Icon=leptocline
+Terminal=false
+Categories=System;
+NoDisplay=false

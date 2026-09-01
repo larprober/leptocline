@@ -1,0 +1,114 @@
+# Linux Leptocline — security toolkit.
+# Every name here was checked to have a real installation candidate in trixie
+# (apt-cache policy, not just a package record) before shipping.
+# Point these at systems you own or are authorised to test.
+
+## recon & host discovery
+nmap
+zenmap
+masscan
+zmap
+arp-scan
+netdiscover
+fping
+hping3
+ike-scan
+dmitry
+thc-ipv6
+
+## DNS
+dnsrecon
+dnsenum
+dnstracer
+fierce
+dnsmap
+
+## SMB / SNMP / service enumeration
+smbclient
+smbmap
+nbtscan
+onesixtyone
+snmp
+sipvicious
+ldap-utils
+
+## TLS/SSL
+sslscan
+testssl.sh
+
+## web
+whatweb
+dirb
+gobuster
+ffuf
+wfuzz
+sqlmap
+wafw00f
+
+## password & hash attacks
+hydra
+john
+medusa
+ncrack
+patator
+crunch
+cewl
+hashid
+hashcat
+chntpw
+pdfcrack
+fcrackzip
+samdump2
+ophcrack
+
+## wireless
+aircrack-ng
+reaver
+wifite
+mdk4
+pixiewps
+cowpatty
+macchanger
+
+## sniffing & MITM
+ettercap-text-only
+dsniff
+bettercap
+driftnet
+netsniff-ng
+ngrep
+p0f
+tcpflow
+
+## credential / protocol tooling
+python3-impacket
+
+## reverse engineering & forensics
+binwalk
+foremost
+scalpel
+steghide
+hexedit
+hexyl
+ltrace
+strace
+apktool
+
+## tunnelling & exfil
+iodine
+dns2tcp
+ptunnel
+
+## subnet / address helpers
+netmask
+ipcalc
+sipcalc
+
+## anonymity
+proxychains4
+tor
+torsocks
+
+## defensive / audit
+chkrootkit
+rkhunter

@@ -1,0 +1,38 @@
+#!/bin/sh
+# Install Prism Launcher (open-source Minecraft launcher) from its official
+# AppImage. Prism is not packaged in Debian, so we fetch the release at build
+# time and unpack it into /opt — unpacking avoids needing FUSE at runtime.
+# A missing network must not kill the build, hence the soft failure.
+set -e
+
+echo "P: lepto — installing Prism Launcher"
+
+URL="https://github.com/PrismLauncher/PrismLauncher/releases/latest/download/PrismLauncher-Linux-x86_64.AppImage"
+TMP=/tmp/Prism.AppImage
+
+if ! curl -fsSL "$URL" -o "$TMP"; then
+	echo "W: lepto — could not download Prism Launcher (no network?); skipping"
+	exit 0
+fi
+
+chmod +x "$TMP"
+mkdir -p /opt/prismlauncher
+cd /opt/prismlauncher
+
+# --appimage-extract unpacks without mounting, so no FUSE is needed here.
+if "$TMP" --appimage-extract >/dev/null 2>&1 && [ -d squashfs-root ]; then
+	ln -sf /opt/prismlauncher/squashfs-root/AppRun /usr/local/bin/prismlauncher
+	# best-effort: install the app icon under a predictable name
+	ICON=$(find squashfs-root -name 'org.prismlauncher.*.svg' -o -name 'org.prismlauncher.*.png' 2>/dev/null | head -1)
+	if [ -n "$ICON" ]; then
+		cp "$ICON" /usr/share/pixmaps/prismlauncher.${ICON##*.}
+	fi
+else
+	# Fallback: ship the raw AppImage; libfuse2t64 lets it self-mount at runtime.
+	echo "W: lepto — extract failed, shipping the AppImage as-is"
+	cp "$TMP" /opt/prismlauncher/PrismLauncher.AppImage
+	ln -sf /opt/prismlauncher/PrismLauncher.AppImage /usr/local/bin/prismlauncher
+fi
+
+rm -f "$TMP"
+echo "P: lepto — Prism Launcher ready (launch: prismlauncher)"

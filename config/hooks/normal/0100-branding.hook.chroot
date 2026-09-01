@@ -1,0 +1,33 @@
+#!/bin/sh
+# Make the identity stick: os-release in both locations, exec bits that an
+# NTFS or FAT build host could not carry, and refreshed icon caches.
+set -e
+
+echo "P: lepto — applying branding"
+
+# Debian ships /etc/os-release as a symlink into /usr/lib. includes.chroot may
+# have replaced either end, so normalise both to the file we shipped.
+if [ -f /etc/os-release ] && [ ! -L /etc/os-release ]; then
+	cp /etc/os-release /usr/lib/os-release
+fi
+
+chmod 0755 /usr/local/bin/lepto /usr/local/bin/leptofetch
+chmod 0440 /etc/sudoers.d/leptocline
+chmod 0644 /usr/share/backgrounds/leptocline/leptocline-wallpaper.png
+
+# Point Debian's shared wallpaper alternative at ours, so anything that asks
+# desktop-base for a background gets the penguin.
+if [ -d /usr/share/desktop-base ]; then
+	update-alternatives --install /usr/share/images/desktop-base/desktop-background \
+		desktop-background /usr/share/backgrounds/leptocline/leptocline-wallpaper.png 90 || true
+fi
+
+if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+	gtk-update-icon-cache -q -f /usr/share/icons/hicolor || true
+fi
+if command -v fc-cache >/dev/null 2>&1; then
+	fc-cache -f >/dev/null || true
+fi
+if command -v update-desktop-database >/dev/null 2>&1; then
+	update-desktop-database -q /usr/share/applications || true
+fi

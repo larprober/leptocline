@@ -1,0 +1,3 @@
+# The live user is a throwaway session on read-only media; installed systems
+# get the normal password prompt from d-i instead.
+lepto ALL=(ALL) NOPASSWD: ALL

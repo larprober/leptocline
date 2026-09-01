@@ -1,0 +1,53 @@
+# Linux Leptocline boot splash.
+# The script plugin can only composite images, so the whole animation is the
+# logo breathing on a flat gradient. Anything fancier means shipping frames.
+
+Window.SetBackgroundTopColor(0.063, 0.071, 0.086);
+Window.SetBackgroundBottomColor(0.020, 0.024, 0.035);
+
+screen_w = Window.GetWidth();
+screen_h = Window.GetHeight();
+
+logo.image = Image("logo.png");
+logo.sprite = Sprite(logo.image);
+logo.x = Window.GetX() + (screen_w - logo.image.GetWidth()) / 2;
+logo.y = Window.GetY() + (screen_h - logo.image.GetHeight()) / 2 - screen_h / 12;
+logo.sprite.SetPosition(logo.x, logo.y, 0);
+
+# There is no fontconfig inside the initramfs, so Image.Text renders routine
+# status lines as empty boxes. Only the disk-unlock prompt draws text now,
+# where showing something imperfect beats showing nothing at all.
+message.sprite = Sprite();
+message.sprite.SetPosition(0, logo.y + logo.image.GetHeight() + 40, 10);
+
+fun set_message(text) {
+  if (text == "") return;
+  image = Image.Text(text, 0.84, 0.86, 0.90, 1);
+  message.sprite.SetImage(image);
+  message.sprite.SetX(Window.GetX() + (screen_w - image.GetWidth()) / 2);
+}
+
+# Breathing opacity, ~2.4s per cycle at the usual 50fps refresh.
+progress = 0;
+fun refresh_callback() {
+  progress++;
+  opacity = 0.72 + 0.28 * Math.Cos(progress / 19);
+  logo.sprite.SetOpacity(opacity);
+}
+Plymouth.SetRefreshFunction(refresh_callback);
+
+
+# Disk unlock prompt.
+fun display_password_callback(prompt, bullets) {
+  dots = "";
+  i = 0;
+  while (i < bullets) { dots += "*"; i++; }
+  set_message(prompt + "  " + dots);
+}
+Plymouth.SetDisplayPasswordFunction(display_password_callback);
+
+fun display_normal_callback() { message.sprite.SetOpacity(0); }
+Plymouth.SetDisplayNormalFunction(display_normal_callback);
+
+fun quit_callback() { logo.sprite.SetOpacity(1); }
+Plymouth.SetQuitFunction(quit_callback);

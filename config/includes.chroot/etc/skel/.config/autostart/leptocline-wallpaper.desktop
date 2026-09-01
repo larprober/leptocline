@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Leptocline wallpaper
+Comment=Apply the Leptocline background to every connected monitor
+Exec=lepto wallpaper
+OnlyShowIn=XFCE;
+NoDisplay=true
+X-XFCE-Autostart-Delay=3

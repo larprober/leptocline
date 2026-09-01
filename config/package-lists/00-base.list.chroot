@@ -1,0 +1,40 @@
+# kernel + live plumbing
+linux-image-amd64
+live-boot
+live-config
+live-config-systemd
+systemd-sysv
+# firmware (needs non-free-firmware, enabled in config/auto/config)
+firmware-linux
+firmware-iwlwifi
+firmware-realtek
+firmware-atheros
+firmware-brcm80211
+# system basics
+sudo
+locales
+keyboard-configuration
+console-setup
+gnupg
+ca-certificates
+less
+nano
+bash-completion
+man-db
+pciutils
+usbutils
+lsb-release
+# networking
+network-manager
+wireless-tools
+iw
+wpasupplicant
+# storage
+e2fsprogs
+btrfs-progs
+dosfstools
+exfatprogs
+ntfs-3g
+gdisk
+parted
+cryptsetup

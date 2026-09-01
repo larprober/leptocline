@@ -1,0 +1,31 @@
+# Xfce, chosen for how far it bends to a theme without fighting back
+xorg
+xfce4
+xfce4-goodies
+xfce4-terminal
+xfce4-power-manager
+xfce4-notifyd
+xfce4-screenshooter
+lightdm
+lightdm-gtk-greeter
+# look and feel
+greybird-gtk-theme
+papirus-icon-theme
+fonts-jetbrains-mono
+fonts-firacode
+fonts-noto-color-emoji
+plymouth
+plymouth-themes
+plymouth-label
+# desktop plumbing
+dbus-x11
+xdg-utils
+polkitd
+network-manager-gnome
+blueman
+pipewire-audio
+pavucontrol
+gvfs
+gvfs-backends
+xarchiver
+thunar-archive-plugin

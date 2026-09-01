@@ -1,0 +1,110 @@
+name: build
+
+# Builds the Leptocline packages, the ISO and the signed APT repo.
+#   - every push / manual run: build packages + ISO, upload as artifacts
+#   - a tag like v1.0:        also attach the ISO to a GitHub Release
+#   - if a GPG secret is set:  build + publish the APT repo to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  workflow_dispatch:
+
+permissions:
+  contents: write      # create releases
+  pages: write         # deploy the repo to Pages
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      HAS_GPG: ${{ secrets.LEPTO_GPG_PRIVATE_KEY != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Free up disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/lib/android /opt/hostedtoolcache
+          df -h /
+
+      - name: Install build tooling
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            live-build debootstrap squashfs-tools xorriso isolinux syslinux-common \
+            grub-pc-bin grub-efi-amd64-bin mtools dosfstools apt-utils gnupg \
+            ca-certificates curl nodejs
+
+      - name: Build the Debian packages
+        run: bash packaging/build-packages.sh
+
+      - name: Build the ISO
+        run: sudo bash build.sh --no-deps
+
+      - name: Name the artifacts
+        id: names
+        run: |
+          echo "iso=$(ls *.iso | head -1)" >> "$GITHUB_OUTPUT"
+
+      - name: Upload ISO artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: leptocline-iso
+          path: "*.iso"
+          if-no-files-found: error
+
+      - name: Upload packages artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: leptocline-debs
+          path: packaging/out/*.deb
+
+      # --- signed APT repo, only when the signing key secret is present ---
+      - name: Build signed APT repo
+        if: env.HAS_GPG == 'true'
+        env:
+          LEPTO_GPG_PRIVATE_KEY: ${{ secrets.LEPTO_GPG_PRIVATE_KEY }}
+        run: |
+          echo "$LEPTO_GPG_PRIVATE_KEY" | gpg --batch --import
+          export LEPTO_GPG_KEY="$(gpg --list-keys --with-colons 'Linux Leptocline Archive Key' | awk -F: '/^pub/{print $5; exit}')"
+          bash repo/make-repo.sh
+
+      - name: Upload repo to Pages
+        if: env.HAS_GPG == 'true'
+        env:
+          LEPTO_GPG_PRIVATE_KEY: ${{ secrets.LEPTO_GPG_PRIVATE_KEY }}
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: repo/public
+
+      # --- release on a tag ---
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sha256sum "${{ steps.names.outputs.iso }}" > SHA256SUMS
+          gh release create "${{ github.ref_name }}" \
+            "${{ steps.names.outputs.iso }}" \
+            packaging/out/*.deb \
+            SHA256SUMS \
+            --title "Linux Leptocline ${{ github.ref_name }}" \
+            --generate-notes
+
+  deploy-pages:
+    needs: build
+    if: ${{ needs.build.result == 'success' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Deploy repo to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
+        continue-on-error: true

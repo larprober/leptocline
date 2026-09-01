@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=Leptocline
+Description=Linux Leptocline boot splash
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/leptocline
+ScriptFile=/usr/share/plymouth/themes/leptocline/leptocline.script

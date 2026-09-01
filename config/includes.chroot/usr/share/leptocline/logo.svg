@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="28.51 1.2 198.98 251.64" width="256" height="256" role="img" aria-label="Linux Leptocline">
+  <title>Linux Leptocline</title>
+  <g fill="#FFFFFF"><ellipse cx="84" cy="216" rx="48" ry="26" transform="rotate(-18 84 216)"/><ellipse cx="172" cy="216" rx="48" ry="26" transform="rotate(18 172 216)"/></g>
+  <g fill="#19C6D6"><ellipse cx="84" cy="216" rx="41" ry="19" transform="rotate(-18 84 216)"/><ellipse cx="172" cy="216" rx="41" ry="19" transform="rotate(18 172 216)"/></g>
+  <g fill="#FFFFFF"><ellipse cx="128" cy="80" rx="57" ry="55"/><ellipse cx="128" cy="152" rx="77" ry="73"/><ellipse cx="63" cy="158" rx="25" ry="49" transform="rotate(12 63 158)"/><ellipse cx="193" cy="158" rx="25" ry="49" transform="rotate(-12 193 158)"/></g>
+  <g fill="#080808"><ellipse cx="128" cy="80" rx="50" ry="48"/><ellipse cx="128" cy="152" rx="70" ry="66"/><ellipse cx="63" cy="158" rx="18" ry="42" transform="rotate(12 63 158)"/><ellipse cx="193" cy="158" rx="18" ry="42" transform="rotate(-12 193 158)"/></g>
+  <g fill="#FFFFFF"><ellipse cx="128" cy="158" rx="49" ry="55"/><ellipse cx="128" cy="103" rx="35" ry="27"/></g>
+  <g fill="#080808"><ellipse cx="110" cy="73" rx="13.5" ry="16.5"/><ellipse cx="146" cy="73" rx="13.5" ry="16.5"/></g>
+  <g fill="#FFFFFF"><ellipse cx="110" cy="73" rx="12" ry="15"/><ellipse cx="146" cy="73" rx="12" ry="15"/><ellipse cx="128" cy="88" rx="6" ry="17"/></g>
+  <g fill="#080808"><ellipse cx="114" cy="76" rx="5.2" ry="7.5"/><ellipse cx="142" cy="76" rx="5.2" ry="7.5"/></g>
+  <g fill="#19C6D6"><ellipse cx="128" cy="101" rx="21" ry="12.5"/></g>
+  <g fill="#0E8C99"><ellipse cx="128" cy="107" rx="15" ry="3.5"/></g>
+  <g fill="#FFFFFF"><path d="M86.6 51.5L86.6 40L100.4 18.15L114.2 38.85L128 10.1L141.8 38.85L155.6 18.15L169.4 40L169.4 51.5Z"/></g>
+  <g fill="#F7CB45"><path d="M92 50L92 40L104 21L116 39L128 14L140 39L152 21L164 40L164 50Z"/></g>
+  <g fill="#C9971E"><rect x="92" y="44" width="72" height="2.6"/></g>
+  <g fill="#19C6D6"><ellipse cx="128" cy="47" rx="3.2" ry="3.2"/><ellipse cx="108" cy="47" rx="2.6" ry="2.6"/><ellipse cx="148" cy="47" rx="2.6" ry="2.6"/></g>
+  <g fill="#F7CB45"><ellipse cx="128" cy="13" rx="3.8" ry="3.8"/><ellipse cx="104" cy="20" rx="3.1" ry="3.1"/><ellipse cx="152" cy="20" rx="3.1" ry="3.1"/></g>
+</svg>

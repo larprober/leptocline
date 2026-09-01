@@ -1,0 +1,24 @@
+#!/bin/sh
+# Point Calamares at the Leptocline branding. We rely on calamares-settings-debian
+# for the working module sequence and only swap the branding component, so we
+# never have to maintain the full settings.conf ourselves.
+set -e
+
+CONF=/etc/calamares/settings.conf
+if [ ! -f "$CONF" ]; then
+	echo "W: lepto — calamares settings.conf missing, skipping rebrand"
+	exit 0
+fi
+
+echo "P: lepto — rebranding Calamares"
+# settings.conf has a line like:  branding: debian
+sed -i 's/^\([[:space:]]*branding:[[:space:]]*\).*/\1leptocline/' "$CONF"
+
+# make sure our logo is in place even if the image build order changed
+if [ -f /usr/share/leptocline/logo.png ] && [ ! -f /etc/calamares/branding/leptocline/logo.png ]; then
+	cp /usr/share/leptocline/logo.png /etc/calamares/branding/leptocline/logo.png
+fi
+
+if command -v update-desktop-database >/dev/null 2>&1; then
+	update-desktop-database -q /usr/share/applications 2>/dev/null || true
+fi

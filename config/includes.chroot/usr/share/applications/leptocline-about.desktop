@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.1
+Name=About Linux Leptocline
+Comment=What this system ships with
+Exec=xfce4-terminal --hold --title="About Linux Leptocline" --command="lepto about"
+Icon=leptocline
+Terminal=false
+Categories=System;
+Keywords=lepto;about;system;

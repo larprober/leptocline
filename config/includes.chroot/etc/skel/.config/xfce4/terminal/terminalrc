@@ -1,0 +1,23 @@
+[Configuration]
+FontName=JetBrains Mono 11
+MiscAlwaysShowTabs=FALSE
+MiscBell=FALSE
+MiscCursorBlinks=TRUE
+MiscCursorShape=TERMINAL_CURSOR_SHAPE_BLOCK
+MiscDefaultGeometry=100x28
+MiscMenubarDefault=FALSE
+MiscToolbarDefault=FALSE
+MiscConfirmClose=FALSE
+MiscShowUnsafePasteDialog=TRUE
+ScrollingLines=20000
+ScrollingUnlimited=FALSE
+BackgroundDarkness=0.960000
+BackgroundMode=TERMINAL_BACKGROUND_TRANSPARENT
+ColorForeground=#d7dae0
+ColorBackground=#0a0c10
+ColorCursor=#1436ee
+ColorSelectionBackground=#1436ee
+ColorSelection=#ffffff
+ColorBold=#ffffff
+ColorPalette=#12151c;#e0575b;#7ec27a;#e0c46c;#1436ee;#a06ce0;#4fb8c9;#c3c8d1;#3a4050;#ff7b80;#9fe09a;#ffe08a;#4c7bff;#c79bff;#7fe3f5;#ffffff
+TabActivityColor=#1436ee

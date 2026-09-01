@@ -1,0 +1,18 @@
+# network analysis + auditing: the reason anyone boots a live stick
+nmap
+tcpdump
+tshark
+whois
+dnsutils
+netcat-openbsd
+socat
+mtr-tiny
+traceroute
+iperf3
+ethtool
+iproute2
+openssh-client
+openssl
+lynis
+curl
+wget

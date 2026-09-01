@@ -1,0 +1,7 @@
+/* Linux Leptocline — nudge Greybird's selection colour to the mark's blue. */
+@define-color theme_selected_bg_color #1436EE;
+@define-color selected_bg_color        #1436EE;
+@define-color accent_bg_color          #1436EE;
+@define-color accent_color             #4C7BFF;
+
+.xfce4-panel { background-color: rgba(10, 12, 16, 0.94); }
