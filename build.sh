@@ -76,8 +76,14 @@ else
 	SUDO='sudo'
 fi
 
-[ -x auto/config ] || die 'auto/config is missing or not executable. It must sit
-       at the TOP LEVEL of the build tree; live-build ignores it anywhere else.'
+[ -f auto/config ] || die 'auto/config is missing. It must sit at the TOP LEVEL
+       of the build tree; live-build ignores it anywhere else.'
+# A checkout on a filesystem that drops the exec bit (Windows, some CI) leaves
+# our scripts non-executable; restore the bits ourselves rather than demanding
+# git preserved them.
+chmod +x auto/config build.sh 2>/dev/null || true
+find config/hooks/normal -maxdepth 1 -type f -name '*.hook.chroot' -exec chmod +x {} + 2>/dev/null || true
+find config/includes.chroot/usr/local/bin config/includes.chroot/usr/bin -maxdepth 1 -type f -exec chmod +x {} + 2>/dev/null || true
 
 SUITE=$(awk -F= '/^SUITE=/{print $2; exit}' auto/config)
 SUITE=${SUITE:-trixie}
