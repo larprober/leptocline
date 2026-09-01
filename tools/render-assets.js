@@ -612,6 +612,50 @@ function icon(size, ss) {
   return cv;
 }
 
+/* ------------------------------------------------- terminal (ANSI) logo ---- */
+
+// Render the crowned penguin as truecolor half-block art for leptofetch. Each
+// character cell is two vertical pixels: U+2580 "▀" paints the top pixel as the
+// foreground colour and the bottom as the background, so a W-column cell grid
+// resolves a W×(2·rows) image. Edge cells with only one opaque pixel use a
+// half block against the default background so the silhouette stays crisp.
+function generateAnsi(cols = 40) {
+  const pad = 0.06;
+  const k = (cols * (1 - pad * 2)) / MARK_BOX.w;
+  const w = cols;
+  const h = Math.ceil((MARK_BOX.h * k) / 2) * 2 + 2; // even, small top/bottom air
+  const cv = new Canvas(w, h, 3);
+  drawShapes(cv, PENGUIN, ([x, y]) => [
+    w / 2 + (x - MARK_BOX.cx) * k,
+    h / 2 + (y - MARK_BOX.cy) * k,
+  ]);
+  const px = cv.resolve(); // straight RGBA, w×h
+  const at = (x, y) => {
+    const i = (y * w + x) * 4;
+    return { r: px[i], g: px[i + 1], b: px[i + 2], a: px[i + 3] };
+  };
+  const FG = (c) => `\x1b[38;2;${c.r};${c.g};${c.b}m`;
+  const BG = (c) => `\x1b[48;2;${c.r};${c.g};${c.b}m`;
+  const RS = '\x1b[0m';
+  const T = 128; // alpha threshold
+
+  const lines = [];
+  for (let cy = 0; cy < h / 2; cy++) {
+    let line = '';
+    for (let x = 0; x < w; x++) {
+      const top = at(x, cy * 2);
+      const bot = at(x, cy * 2 + 1);
+      const ot = top.a >= T, ob = bot.a >= T;
+      if (ot && ob) line += `${RS}${FG(top)}${BG(bot)}▀`;
+      else if (ot) line += `${RS}${FG(top)}▀`;       // top only, default bg
+      else if (ob) line += `${RS}${FG(bot)}▄`;       // bottom only
+      else line += `${RS} `;
+    }
+    lines.push(line + RS);
+  }
+  return lines.join('\n') + '\n';
+}
+
 /* ---------------------------------------------------- svg wallpaper ---- */
 
 // xfdesktop falls back to a compiled-in path when it cannot match the
@@ -769,8 +813,13 @@ function main() {
   fs.copyFileSync(path.join(OUT, 'wallpaper-2560x1440.png'),
     path.join(CHROOT, 'usr/share/leptocline/wallpaper.png'));
 
+  console.log('\n terminal art');
+  const ansi = generateAnsi(40);
+  put(path.join(OUT, 'penguin.ansi'), ansi);
+  put(path.join(CHROOT, 'usr/share/leptocline/penguin.ansi'), ansi);
+
   console.log('\ndone.');
 }
 
 if (require.main === module) main();
-module.exports = { Canvas, PENGUIN, GLYPHS, wordmarkPolys, wordmarkWidth, drawShapes, MARK_BOX, WHITE, BLACK, ACCENT };
+module.exports = { Canvas, PENGUIN, GLYPHS, wordmarkPolys, wordmarkWidth, drawShapes, MARK_BOX, WHITE, BLACK, ACCENT, generateAnsi };
