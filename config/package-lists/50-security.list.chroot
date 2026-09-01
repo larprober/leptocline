@@ -1,10 +1,12 @@
-# Linux Leptocline — security toolkit.
-# Every name here was checked to have a real installation candidate in trixie
-# (apt-cache policy, not just a package record) before shipping.
+# Linux Leptocline — security toolkit (169 tools).
+# Every name was verified to have a real installation candidate in trixie
+# (apt-cache policy) AND to co-install cleanly as a set (apt-get install -s),
+# so the build cannot fail on a bad or conflicting package.
 # Point these at systems you own or are authorised to test.
 
 ## recon & host discovery
 nmap
+ndiff
 zenmap
 masscan
 zmap
@@ -15,26 +17,26 @@ hping3
 ike-scan
 dmitry
 thc-ipv6
+sipvicious
+pnscan
 
 ## DNS
 dnsrecon
 dnsenum
 dnstracer
-fierce
 dnsmap
+dnswalk
+dnstwist
+fierce
 
-## SMB / SNMP / service enumeration
+## SMB / SNMP / LDAP / service enumeration
 smbclient
 smbmap
 nbtscan
 onesixtyone
 snmp
-sipvicious
+polenum
 ldap-utils
-
-## TLS/SSL
-sslscan
-testssl.sh
 
 ## web
 whatweb
@@ -44,31 +46,63 @@ ffuf
 wfuzz
 sqlmap
 wafw00f
+cadaver
+wig
+
+## TLS / SSL
+sslscan
+testssl.sh
+sslh
+sslsplit
 
 ## password & hash attacks
 hydra
-john
 medusa
 ncrack
 patator
+john
+hashcat
+hashid
 crunch
 cewl
-hashid
-hashcat
-chntpw
-pdfcrack
+cupp
+maskprocessor
+rarcrack
 fcrackzip
+pdfcrack
 samdump2
 ophcrack
+chntpw
 
 ## wireless
 aircrack-ng
 reaver
 wifite
+mdk3
 mdk4
 pixiewps
 cowpatty
-macchanger
+bully
+hostapd
+horst
+wavemon
+iw
+wireless-tools
+
+## bluetooth / RFID / NFC / SDR
+bluez
+bluez-tools
+btscanner
+ubertooth
+libnfc-bin
+mfoc
+mfcuk
+hackrf
+rtl-sdr
+gnuradio
+gqrx-sdr
+multimon-ng
+inspectrum
 
 ## sniffing & MITM
 ettercap-text-only
@@ -79,36 +113,95 @@ netsniff-ng
 ngrep
 p0f
 tcpflow
+tcpdump
+tshark
+wireshark
+termshark
+macchanger
+arpwatch
+darkstat
+iftop
+nethogs
+nfdump
+argus-client
+
+## reverse engineering & debugging
+gdb
+gdbserver
+ltrace
+strace
+edb-debugger
+apktool
+procyon-decompiler
+pev
+hexedit
+hexer
+hexyl
+ghex
+wxhexeditor
+xxd
+
+## forensics & recovery
+sleuthkit
+autopsy
+foremost
+scalpel
+testdisk
+extundelete
+ext4magic
+recoverjpeg
+magicrescue
+safecopy
+dc3dd
+guymager
+
+## stego & metadata
+steghide
+stegsnow
+outguess
+exiv2
+libimage-exiftool-perl
 
 ## credential / protocol tooling
 python3-impacket
+python3-scapy
 
-## reverse engineering & forensics
-binwalk
-foremost
-scalpel
-steghide
-hexedit
-hexyl
-ltrace
-strace
-apktool
+## OSINT
+recon-ng
+sherlock
 
-## tunnelling & exfil
-iodine
-dns2tcp
-ptunnel
-
-## subnet / address helpers
-netmask
-ipcalc
-sipcalc
-
-## anonymity
+## anonymity & tunnelling
 proxychains4
 tor
 torsocks
+obfs4proxy
+iodine
+dns2tcp
+ptunnel
+httptunnel
+udptunnel
+stunnel4
+socat
 
-## defensive / audit
+## address / network helpers
+netmask
+ipcalc
+sipcalc
+whois
+geoip-bin
+mtr-tiny
+traceroute
+tcptraceroute
+ncat
+
+## defensive / audit / malware
 chkrootkit
 rkhunter
+lynis
+clamav
+clamav-daemon
+aide
+tiger
+debsums
+unhide
+yara

@@ -21,8 +21,9 @@ cmd_about() {
 
   ${W}desktop${N}    Xfce 4, Greybird dark, JetBrains Mono
   ${W}kernel${N}     $(uname -r)
-  ${W}toolkit${N}    70+ security tools: nmap, hydra, hping3, aircrack-ng,
-             sqlmap, john, radare2, bettercap, wireshark (lepto tools)
+  ${W}toolkit${N}    169 security tools: nmap, hydra, hping3, aircrack-ng,
+             sqlmap, john, bettercap, wireshark, sleuthkit, gnuradio,
+             ubertooth, yara, and much more (lepto tools)
   ${W}build${N}      live-build, debian-installer, iso-hybrid (BIOS + UEFI)
   ${W}home${N}       ${HOME_URL}
 
@@ -51,19 +52,22 @@ cmd_tools() {
     done
     printf "\n"
   done <<'CATS'
-recon:nmap masscan zmap arp-scan netdiscover fping hping3 ike-scan zenmap dmitry atk6-thc-ipv6
-dns:dnsrecon dnsenum dnstracer fierce dnsmap dig
-enum:smbclient smbmap nbtscan onesixtyone snmpwalk svmap ldapsearch
-tls:sslscan testssl.sh
-web:whatweb dirb gobuster ffuf wfuzz sqlmap wafw00f
-passwords:hydra john medusa ncrack patator crunch cewl hashid hashcat chntpw pdfcrack fcrackzip samdump2 ophcrack
-wireless:aircrack-ng reaver wifite mdk4 pixiewps cowpatty macchanger
-sniff:tshark tcpdump ettercap dsniff bettercap driftnet netsniff-ng ngrep p0f tcpflow
-reversing:binwalk foremost scalpel steghide hexedit hexyl ltrace strace apktool gdb
-tunnelling:iodine dns2tcp ptunnel
-subnet:netmask ipcalc sipcalc
-anonymity:proxychains4 tor torsocks
-defensive:chkrootkit rkhunter lynis
+recon:nmap masscan zmap arp-scan netdiscover fping hping3 ike-scan zenmap dmitry sipvicious pnscan
+dns:dnsrecon dnsenum dnstracer fierce dnsmap dnstwist dnswalk dig
+enum:smbclient smbmap nbtscan onesixtyone snmpwalk polenum ldapsearch
+tls:sslscan testssl.sh sslsplit
+web:whatweb dirb gobuster ffuf wfuzz sqlmap wafw00f cadaver wig
+passwords:hydra john medusa ncrack patator crunch cewl cupp hashid hashcat chntpw pdfcrack fcrackzip rarcrack samdump2 ophcrack
+wireless:aircrack-ng reaver wifite mdk3 mdk4 pixiewps cowpatty bully wavemon iw
+radio-nfc:hackrf_info rtl_sdr multimon-ng gnuradio-config-info bluetoothctl btscan ubertooth-util nfc-list mfoc
+sniff:tshark tcpdump ettercap dsniff bettercap driftnet netsniff-ng ngrep p0f tcpflow arpwatch iftop
+reversing:binwalk foremost scalpel testdisk steghide outguess exiftool hexedit hexyl ltrace strace apktool gdb yara
+forensics:sleuthkit autopsy extundelete recoverjpeg magicrescue guymager
+osint:recon-ng sherlock
+tunnelling:iodine dns2tcp ptunnel httptunnel udptunnel socat
+subnet:netmask ipcalc sipcalc whois
+anonymity:proxychains4 tor torsocks obfs4proxy
+defensive:chkrootkit rkhunter lynis clamscan aide tiger unhide debsums
 CATS
   printf "  %s%d of %d present. Missing something big like metasploit? try %slepto msf%s.%s\n\n" "$K" "$shown" "$total" "$W" "$K" "$N"
 }
