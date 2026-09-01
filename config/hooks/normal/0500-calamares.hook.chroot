@@ -19,6 +19,22 @@ if [ -f /usr/share/leptocline/logo.png ] && [ ! -f /etc/calamares/branding/lepto
 	cp /usr/share/leptocline/logo.png /etc/calamares/branding/leptocline/logo.png
 fi
 
+# The desktop launcher and the on-desktop icon both say "Install Debian" — the
+# label lives in the shipped .desktop AND is hardcoded in the script that copies
+# it to ~/Desktop at login. Rebrand both so the installer reads "Install
+# Leptocline" everywhere, and point the icon at our own artwork.
+LAUNCHER=/usr/share/applications/calamares-install-debian.desktop
+if [ -f "$LAUNCHER" ]; then
+	sed -i 's/Install Debian/Install Leptocline/g; \
+	        s/Installer for Debian Live/Installer for Linux Leptocline/g; \
+	        s/^Icon=.*/Icon=leptocline/' "$LAUNCHER"
+fi
+
+ICON_SCRIPT=/usr/bin/add-calamares-desktop-icon
+if [ -f "$ICON_SCRIPT" ]; then
+	sed -i 's/Name=Install Debian/Name=Install Leptocline/; s/Icon=install-debian/Icon=leptocline/' "$ICON_SCRIPT"
+fi
+
 if command -v update-desktop-database >/dev/null 2>&1; then
 	update-desktop-database -q /usr/share/applications 2>/dev/null || true
 fi

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Install Leptocline
+GenericName=Calamares Installer
+Exec=calamares-install-debian
+Comment=Calamares — Installer for Linux Leptocline
+Keywords=calamares;system;install;debian;installer
+Icon=leptocline
+Terminal=false
+Categories=Qt;System;
+StartupWMClass=calamares
+StartupNotify=True
