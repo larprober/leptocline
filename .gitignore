@@ -24,3 +24,6 @@
 
 # one-off WSL helper scripts
 tools/_*.sh
+
+# generated command inventory
+/commands.txt
