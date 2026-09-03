@@ -27,8 +27,7 @@ lb config noauto \
 	--linux-flavours amd64 \
 	--binary-images iso-hybrid \
 	--bootloaders "syslinux,grub-efi" \
-	--debian-installer live \
-	--debian-installer-gui true \
+	--debian-installer none \
 	--mirror-bootstrap "http://deb.debian.org/debian/" \
 	--mirror-chroot "http://deb.debian.org/debian/" \
 	--mirror-binary "http://deb.debian.org/debian/" \
