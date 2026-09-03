@@ -21,6 +21,8 @@ plymouth-label
 dbus-x11
 xdg-utils
 polkitd
+brightnessctl
+acpi-support
 network-manager-gnome
 blueman
 pipewire-audio
