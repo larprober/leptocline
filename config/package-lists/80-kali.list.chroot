@@ -1,0 +1,59 @@
+# Linux Leptocline — Kali-exclusive tools, pulled from the Kali repo (pinned).
+# Every name was verified present in kali-rolling before shipping. These are the
+# well-known tools Debian does not package; the Debian-native kit is in
+# 50-security. Authorised testing only.
+
+## frameworks & exploitation
+metasploit-framework
+exploitdb
+set
+commix
+beef-xss
+zaproxy
+
+## AD / Windows / creds
+netexec
+crackmapexec
+impacket-scripts
+evil-winrm
+bloodhound.py
+certipy-ad
+bloodyad
+powersploit
+mimikatz
+enum4linux
+enum4linux-ng
+
+## recon / OSINT / subdomains
+theharvester
+spiderfoot
+amass
+subfinder
+sublist3r
+dnsx
+httpx-toolkit
+katana
+hakrawler
+gowitness
+eyewitness
+
+## web
+feroxbuster
+dirbuster
+nuclei
+joomscan
+sslyze
+
+## phishing
+gophish
+responder
+
+## wordlists & payloads
+seclists
+wordlists
+payloadsallthethings
+webshells
+laudanum
+
+## hashes
+hash-identifier
