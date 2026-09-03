@@ -42,7 +42,7 @@ jobs:
               apt-get update
               apt-get install -y --no-install-recommends \
                 live-build debootstrap squashfs-tools xorriso isolinux syslinux-common \
-                grub-pc-bin grub-efi-amd64-bin mtools dosfstools ca-certificates curl
+                grub-pc-bin grub-efi-amd64-bin mtools dosfstools ca-certificates curl gnupg
               bash packaging/build-packages.sh
               bash build.sh --no-deps
             '

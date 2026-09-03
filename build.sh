@@ -95,7 +95,7 @@ if [ "$DEPS" -eq 1 ]; then
 	$SUDO apt-get update
 	$SUDO apt-get install -y --no-install-recommends \
 		live-build debootstrap squashfs-tools xorriso isolinux syslinux-common \
-		grub-pc-bin grub-efi-amd64-bin mtools dosfstools ca-certificates curl
+		grub-pc-bin grub-efi-amd64-bin mtools dosfstools ca-certificates curl gnupg
 else
 	command -v lb >/dev/null 2>&1 || die 'live-build not installed; drop --no-deps.'
 fi

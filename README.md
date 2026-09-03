@@ -64,6 +64,7 @@ qemu-system-x86_64 -m 4096 -enable-kvm -cdrom lepto-linux-1.0-amd64.iso
 | `30-dev` | git, build-essential, node, python3, ripgrep, tmux, btop |
 | `40-apps` | Firefox ESR, Mousepad, Ristretto, disks, calculator |
 | `50-security` | 80+ tools: nmap, hydra, hping3, aircrack-ng, sqlmap, john, bettercap, wifite, ffuf, hashcat, thc-ipv6, iodine... |
+| `80-kali` | 41 Kali-exclusive tools via the Kali repo (pinned low): metasploit, netexec, nuclei, feroxbuster, responder, seclists, bloodhound.py, evil-winrm, theharvester, searchsploit... |
 
 Two commands are the distro's own:
 

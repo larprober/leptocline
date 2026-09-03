@@ -1,0 +1,6 @@
+# Keep Debian as the base: Kali packages are only pulled when named or required,
+# never preferred over a Debian package of the same name. This is what stops the
+# Kali rolling repo from dragging the whole system onto its versions.
+Package: *
+Pin: release o=Kali
+Pin-Priority: 100
