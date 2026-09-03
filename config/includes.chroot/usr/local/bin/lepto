@@ -21,8 +21,8 @@ cmd_about() {
 
   ${W}desktop${N}    Xfce 4, Greybird dark, JetBrains Mono
   ${W}kernel${N}     $(uname -r)
-  ${W}toolkit${N}    210+ security tools (Debian + Kali): nmap, metasploit,
-             hydra, sqlmap, bettercap, netexec, nuclei, feroxbuster,
+  ${W}toolkit${N}    200+ security tools (Debian + Kali): nmap, nuclei,
+             hydra, sqlmap, bettercap, feroxbuster, bloodhound,
              seclists, aircrack-ng, and much more (lepto tools)
   ${W}build${N}      live-build, debian-installer, iso-hybrid (BIOS + UEFI)
   ${W}home${N}       ${HOME_URL}
@@ -68,9 +68,9 @@ tunnelling:iodine dns2tcp ptunnel httptunnel udptunnel socat
 subnet:netmask ipcalc sipcalc whois
 anonymity:proxychains4 tor torsocks obfs4proxy
 defensive:chkrootkit rkhunter lynis clamscan aide tiger unhide debsums
-kali-exploit:msfconsole searchsploit setoolkit commix beef-xss zaproxy
-kali-ad:netexec crackmapexec evil-winrm certipy bloodhound-python enum4linux-ng
-kali-recon:theharvester amass subfinder sublist3r dnsx httpx katana gowitness feroxbuster nuclei
+kali-exploit:searchsploit beef-xss zaproxy feroxbuster nuclei joomscan dirbuster
+kali-ad:certipy bloodhound-python enum4linux-ng impacket-secretsdump mimikatz
+kali-recon:amass subfinder sublist3r dnsx httpx katana gowitness hakrawler eyewitness spiderfoot
 CATS
   printf "  %s%d of %d present. Missing something big like metasploit? try %slepto msf%s.%s\n\n" "$K" "$shown" "$total" "$W" "$K" "$N"
 }

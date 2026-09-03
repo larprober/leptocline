@@ -1,31 +1,30 @@
-# Linux Leptocline — Kali-exclusive tools, pulled from the Kali repo (pinned).
-# Every name was verified present in kali-rolling before shipping. These are the
-# well-known tools Debian does not package; the Debian-native kit is in
-# 50-security. Authorised testing only.
+# Linux Leptocline — Kali-exclusive tools, from the Kali repo (pinned low).
+# All 32 were verified to install AND co-install on the Debian trixie base
+# (apt resolution simulation) before shipping. Tools that need Kali's newer
+# Python 3.14 / Ruby (metasploit, netexec, evil-winrm, theharvester, sslyze,
+# set, commix, crackmapexec, bloodyad) are NOT installable on trixie and are
+# left out — Metasploit is available at runtime via `lepto msf`.
+# Authorised testing only.
 
-## frameworks & exploitation
-metasploit-framework
+## exploitation & web
 exploitdb
-set
-commix
 beef-xss
 zaproxy
+feroxbuster
+nuclei
+joomscan
+dirbuster
 
-## AD / Windows / creds
-netexec
-crackmapexec
+## AD / Windows / credentials
 impacket-scripts
-evil-winrm
 bloodhound.py
 certipy-ad
-bloodyad
 powersploit
 mimikatz
 enum4linux
 enum4linux-ng
 
 ## recon / OSINT / subdomains
-theharvester
 spiderfoot
 amass
 subfinder
@@ -37,18 +36,11 @@ hakrawler
 gowitness
 eyewitness
 
-## web
-feroxbuster
-dirbuster
-nuclei
-joomscan
-sslyze
-
 ## phishing
 gophish
 responder
 
-## wordlists & payloads
+## wordlists & payloads (data)
 seclists
 wordlists
 payloadsallthethings
