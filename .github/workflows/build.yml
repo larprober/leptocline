@@ -1,14 +1,16 @@
 name: build
 
-# Builds the Leptocline packages, the ISO and the signed APT repo.
-#   - every push / manual run: build packages + ISO, upload as artifacts
-#   - a tag like v1.0:        also attach the ISO to a GitHub Release
-#   - if a GPG secret is set:  build + publish the APT repo to GitHub Pages
+# Builds the Leptocline packages and the ISO, uploads them as artifacts, and
+# (if a GPG secret is set) builds + publishes the APT repo to GitHub Pages.
+#
+# Releases are cut MANUALLY, not here: the ISO is ~3.8 GB and GitHub caps a
+# release asset at 2 GB, so a release ships the ISO split into <2 GB parts with
+# a matching SHA256SUMS. Because each live-build run is non-reproducible, the
+# published release is one verified image, not whatever a tag rebuild produced.
 
 on:
   push:
     branches: [ main ]
-    tags: [ 'v*' ]
   workflow_dispatch:
 
 permissions:
@@ -85,20 +87,6 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: repo/public
-
-      # --- release on a tag ---
-      - name: Publish release
-        if: startsWith(github.ref, 'refs/tags/')
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          sha256sum "${{ steps.names.outputs.iso }}" > SHA256SUMS
-          gh release create "${{ github.ref_name }}" \
-            "${{ steps.names.outputs.iso }}" \
-            packaging/out/*.deb \
-            SHA256SUMS \
-            --title "Linux Leptocline ${{ github.ref_name }}" \
-            --generate-notes
 
   deploy-pages:
     needs: build
