@@ -9,9 +9,45 @@ drive from the same image.
   base      Debian 13 (trixie), amd64
   desktop   Xfce 4 + LightDM, Greybird dark, Papirus, JetBrains Mono
   image     iso-hybrid — boots BIOS and UEFI, dd-able to a USB stick
-  installer debian-installer (graphical), included on the ISO
-  live user lepto / no password / hostname understudy
+  installer Calamares (graphical), launched from the live desktop
+  live user lepto / password live / passwordless sudo / hostname leptocline
+  toolkit   ~200 security tools (Debian-native + pinned Kali)
 ```
+
+## Download & run
+
+Write the ISO to a USB stick (8 GB+) and boot it — it runs entirely off the
+stick, touching nothing on your disk until you choose to install.
+
+**Verify your download** (the distributed 1.0 image):
+
+```
+sha256  566F6157610BCD9A9DB155346AAABEDD747D89AE5AC1466BF74BFCC890EB2B49
+```
+
+```bash
+sha256sum leptocline-1.0-amd64.hybrid.iso
+```
+
+Match that string and the download is intact and untampered. (A copy you build
+yourself will have a different hash — live-build images are not bit-reproducible.)
+
+**Write it to the stick** — this erases the stick:
+
+- Windows: [Rufus](https://rufus.ie) → select the ISO → START → choose **DD Image mode**.
+- Linux/macOS: `sudo dd if=leptocline-1.0-amd64.hybrid.iso of=/dev/sdX bs=4M status=progress oflag=sync` (check the device name first).
+
+**Boot it:** reboot, tap the boot-menu key (F9/F12/Esc depending on the maker),
+pick the USB, choose **Live system**. Log in as `lepto` / `live` if asked.
+
+> **Two warnings.** The image is unsigned, so you must **disable Secure Boot**
+> in firmware to boot it. And do this **only on hardware you own** — never on a
+> work or school machine: those often have BitLocker/device encryption, and
+> changing Secure Boot triggers a recovery-key lockout only the IT owner can undo.
+
+To install it to a drive, run the **Install Leptocline** icon on the live
+desktop (Calamares) — "Guided / use largest free space" installs it alongside an
+existing OS.
 
 ## Build it
 
